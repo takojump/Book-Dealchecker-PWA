@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#111111" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Book Deal Checker</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="title">
+      <div class="h1">📚 Deal Checker</div>
+      <div class="sub">FB vs Shopee • Threshold</div>
+    </div>
+    <button id="btnAdd" class="btn primary">+ Add</button>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="row">
+        <label class="field">
+          <span>Threshold (%)</span>
+          <input id="threshold" type="number" min="0" max="99" step="1" value="70" />
+        </label>
+
+        <label class="field">
+          <span>Search</span>
+          <input id="search" type="text" placeholder="ชื่อหนังสือ / keyword" />
+        </label>
+      </div>
+
+      <div class="row row-compact">
+        <label class="chip">
+          <input id="onlyPass" type="checkbox" checked />
+          <span>Show only ≥ threshold</span>
+        </label>
+
+        <label class="field">
+          <span>Status</span>
+          <select id="statusFilter">
+            <option value="">All</option>
+            <option value="Interested">Interested</option>
+            <option value="Messaged">Messaged</option>
+            <option value="Meetup">Meetup</option>
+            <option value="Bought">Bought</option>
+            <option value="Missed">Missed</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Sort</span>
+          <select id="sort">
+            <option value="disc_desc">Discount (desc)</option>
+            <option value="fb_asc">FB price (asc)</option>
+            <option value="date_desc">Date (desc)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="row row-compact">
+        <button id="btnExport" class="btn">Export CSV</button>
+        <label class="btn file">
+          Import CSV
+          <input id="importFile" type="file" accept=".csv" />
+        </label>
+        <button id="btnClear" class="btn danger ghost">Clear all</button>
+      </div>
+    </section>
+
+    <section id="list" class="list"></section>
+    <div id="empty" class="empty hidden">ยังไม่มีดีล — กด “+ Add” เพื่อเริ่ม</div>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden" aria-hidden="true">
+    <div class="sheet">
+      <div class="sheet-head">
+        <div id="modalTitle" class="sheet-title">Add deal</div>
+        <button id="btnClose" class="btn ghost">✕</button>
+      </div>
+
+      <div class="sheet-body">
+        <label class="field">
+          <span>Book title / keywords</span>
+          <input id="fTitle" type="text" placeholder="เช่น The Design of Everyday Things" />
+        </label>
+
+        <div class="row">
+          <label class="field">
+            <span>FB price (THB)</span>
+            <input id="fFb" type="number" min="0" step="1" placeholder="0" />
+          </label>
+          <label class="field">
+            <span>Shopee price (THB)</span>
+            <input id="fShopee" type="number" min="0" step="1" placeholder="0" />
+          </label>
+        </div>
+
+        <div class="row">
+          <label class="field">
+            <span>Facebook link (optional)</span>
+            <input id="fFbLink" type="url" placeholder="https://facebook.com/..." />
+          </label>
+          <label class="field">
+            <span>Shopee link (optional)</span>
+            <input id="fShopeeLink" type="url" placeholder="https://shopee.co.th/..." />
+          </label>
+        </div>
+
+        <div class="row">
+          <label class="field">
+            <span>Status</span>
+            <select id="fStatus">
+              <option>Interested</option>
+              <option>Messaged</option>
+              <option>Meetup</option>
+              <option>Bought</option>
+              <option>Missed</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Note</span>
+            <input id="fNote" type="text" placeholder="สภาพ / นัดรับ / edition ฯลฯ" />
+          </label>
+        </div>
+
+        <div class="hint" id="calcHint">Discount: —</div>
+      </div>
+
+      <div class="sheet-foot">
+        <button id="btnDelete" class="btn danger ghost hidden">Delete</button>
+        <div class="spacer"></div>
+        <button id="btnSave" class="btn primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
+    }
+  </script>
+</body>
+</html>
